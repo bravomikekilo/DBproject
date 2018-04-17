@@ -7,7 +7,7 @@
     "rundev": "nodejs index.js --config_file config.dev.json --db_config config.db.json"
   },
   "author": "bravomikekilo@outlook.com",
-  "license": "GPLv3",
+  "license": "GPLv2",
   "private": true,
   "dependencies": {
     "argparse": "^1.0.10",
