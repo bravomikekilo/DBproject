@@ -2,12 +2,14 @@
 <template>
 <div>
     <div id='login-page' class='main-container' v-bind:class="{hidden: logged}">
-        <el-tabs v-model="loginKind">
-            <el-tab-pane label='患者' name='patient'></el-tab-pane>
-            <el-tab-pane label='医生' name='doctor'></el-tab-pane>
-        </el-tabs>
-        <el-input v-model="username" placeholder='用户名'></el-input>
-        <el-button type='primary' @click="login" v-bind:disabled='logging'>登录</el-button>
+        <div id='login-frame'>
+            <el-tabs v-model="loginKind">
+                <el-tab-pane label='患者' name='patient'></el-tab-pane>
+                <el-tab-pane label='医生' name='doctor'></el-tab-pane>
+            </el-tabs>
+            <el-input v-model="username" placeholder='用户名'></el-input>
+            <el-button type='primary' @click="login" v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
+        </div>
     </div>
     <div id='patient-page' class="main-container" v-bind:class="{hidden: !isPatient}">
         <patient-page></patient-page>
@@ -100,6 +102,20 @@ body, html{
 #login-page {
     position: absolute;
     background-color: white;
+    padding-left: 5em;
+    padding-right: 5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-frame{
+    padding: 2em;
+    align-items: center;
+    width: 20em;
+    margin: auto;
+    border: solid 1px grey;
+    border-radius: 20px;
 }
 
 .main-container {
