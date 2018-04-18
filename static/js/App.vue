@@ -10,19 +10,22 @@
         <el-button type='primary' @click="login">登录</el-button>
     </div>
     <div id='patient-page' class="main-container" v-bind:class="{hidden: !isPatient}">
-        isPatient
+        <patient-page></patient-page>
     </div>
 
     <div id='doctor-page' class="main-container" v-bind:class="{hidden: !isDoctor}">
-        isDoctor
+        <doctor-page></doctor-page>
     </div>
 
 </div>
 </template>
 
 <script>
+import PatientPage from './PatientPage.vue'
+import DoctorPage from './DoctorPage.vue'
 
 export default {
+  components: {PatientPage, DoctorPage},
   data() {
     return {
       data: 'welcome to parcel',
