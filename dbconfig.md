@@ -55,9 +55,7 @@
 
 列   | 列名 | 类型 | 约束
 -----|-----|-----| ----
-预约号| id  | serial | 外键
-患者代码| pid | integer | not null
-医生代码| did | integer | not null
+预约号| id  | serial | 外键 reservation(id)
 药物使用| medicine | text
 病例描述| description | text | not null
 
@@ -69,10 +67,10 @@
 列 | 列名 | 类型 | 约束
 --- | --- | --- | ---
 预约号 | id | serial | 主键 not null
-日期   | date | date | not null
+日期   | commitdate | date | not null
 医生代码 | did | integer | not null 外键约束
 患者代码 | pid | integer | not null 外键约束
-预约时间 | time | integer | not null Unique 约束
+预约时间 | section | integer | not null Unique 约束
 
 
 ## 视图的设计
