@@ -1,8 +1,15 @@
 const {Pool, Client} = require('pg');
 const Router = require('koa-router');
+const Doctors = require('./doctors');
 
 
-
+/**
+ * MainRouter 主路由及响应函数所需的全局上下文
+ * @constructor
+ * @param {object} dbConfig - a JSON contains Database config for pgPool
+ * @member {Pool} pgPool - a PostgreSQL connection pool config with dbConfig
+ * @member {Router} router - a Koa router work as application main router
+ */
 class MainRouter {
 
     constructor(dbConfig) {
@@ -29,6 +36,8 @@ class MainRouter {
             }
             catch (e) { ctx.status = 500; }
         });
+
+        Doctors.setUp(this)
 
     }
 }
