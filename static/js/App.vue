@@ -1,63 +1,85 @@
 
 <template>
-    <div>
-        <h3>{{data}}</h3>
-        <button @click="fetch"> click me </button>
-        <item-list v-bind:items="items"></item-list>
-        <input v-model="newItem" v-on:keyup.enter="insertNew"
-            placeholder="new item">
+<div>
+    <div id='login-page' class='main-container' v-bind:class="{hidden: logged}">
+        <el-tabs v-model="loginKind">
+            <el-tab-pane label='患者' name='patient'></el-tab-pane>
+            <el-tab-pane label='医生' name='doctor'></el-tab-pane>
+        </el-tabs>
+        <el-input v-model="username" placeholder='用户名'></el-input>
+        <el-button type='primary' @click="login">登录</el-button>
     </div>
+    <div id='patient-page' class="main-container" v-bind:class="{hidden: !isPatient}">
+        isPatient
+    </div>
+
+    <div id='doctor-page' class="main-container" v-bind:class="{hidden: !isDoctor}">
+        isDoctor
+    </div>
+
+</div>
 </template>
 
 <script>
-import ItemList from './ItemList.vue'
 
 export default {
   data() {
     return {
       data: 'welcome to parcel',
-      items: [],
-      newItem: '',
+      role: '',
+      username: '',
+      loginKind: 'patient'
     }
   },
-  components: {
-      ItemList
+  computed: {
+      logged() {
+          return this.role != '';
+      },
+      isPatient() {
+          return this.role == 'patient';
+      },
+      isDoctor() {
+          return this.role == 'doctor';
+      }
   },
   methods: {
-    fetch() {
-      console.log('prepare to submit');
-
-      fetch('test/items', {method: 'get'}).then(
-          (res) => {
-              res.json().then((value) => {
-                  this.items = value.map((row) => row.content);
-              });
+      login() {
+          console.log('prepare to login');
+          let loginKind = this.loginKind;
+          if(loginKind == 'patient' || loginKind == 'doctor'){
+              this.role = loginKind;
+          } else {
+              this.role = '';
           }
-      ).catch((err) => {
-          this.data = "Error on fetch client data"
-      });
-    },
-    insertNew() {
-        console.log('insert new item:' + this.newItem);
-
-        fetch('test/items', {
-            method: 'POST',
-            body: this.newItem
-        }).then(
-            (res) => {
-                if(res.status == 200){
-                    this.fetch();
-                } else {
-                    this.data = 'insert failed';
-                }
-            }
-        ).catch((err) => {
-            this.data = "Error on inserting item"
-        });
-
-    }
+      }
   }
-
 }
 </script>
+
+<style>
+body, html{
+    height: 100%;
+    bottom: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+#login-page {
+    position: absolute;
+    background-color: white;
+}
+
+.main-container {
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+
+
+
+</style>
 
