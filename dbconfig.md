@@ -16,7 +16,6 @@
 医生代码 | id | serial 主键 null
 医生名称 | name | text  not null
 科室  | office |  text  not null
-空闲  | idle |  boolean  not null
 用户名 | username |  text  not null
 密码  | password | text(hash) not null
 
