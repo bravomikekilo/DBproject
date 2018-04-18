@@ -1,6 +1,7 @@
 const {Pool, Client} = require('pg');
 const Router = require('koa-router');
 const Doctors = require('./doctors');
+const Accounts = require('./accounts')
 
 
 /**
@@ -37,6 +38,7 @@ class MainRouter {
             catch (e) { ctx.status = 500; }
         });
 
+        Accounts.setUp(this)
         Doctors.setUp(this)
 
     }

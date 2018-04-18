@@ -1,8 +1,12 @@
 <template>
     <el-tabs v-model="aspect">
         <el-tab-pane label="挂号" name='reserve'>
-            挂号
+            <el-tabs>
+                <el-tab-pane v-for="office in offices" v-bind:key='office'
+                    v-bind:label="office" v-bind:name="office">
+                </el-tab-pane>
 
+            </el-tabs>
 
 
         </el-tab-pane>
@@ -18,8 +22,13 @@
 <script>
 export default {
   data(){
+    fetch('/offices', {method: 'GET'}).then((res) =>{
+        res.json().then((ret) => this.offices = ret.map(x => x.office))
+    }).catch((err) => console.log(err))
+
     return {
-        aspect: 'reserve'
+        aspect: 'reserve',
+        offices: []
     }
   }
 }

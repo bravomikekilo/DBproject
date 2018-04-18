@@ -4,7 +4,8 @@
   "description": "a class project for database class",
   "main": "index.js",
   "scripts": {
-    "rundev": "nodejs index.js --config_file config.dev.json --db_config config.db.json"
+    "dev": "nodejs index.js --config_file config.dev.json --db_config config.db.json",
+    "watch": "parcel watch ./static/html/index.html"
   },
   "author": "bravomikekilo@outlook.com",
   "license": "GPLv2",

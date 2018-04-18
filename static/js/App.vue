@@ -7,7 +7,7 @@
             <el-tab-pane label='医生' name='doctor'></el-tab-pane>
         </el-tabs>
         <el-input v-model="username" placeholder='用户名'></el-input>
-        <el-button type='primary' @click="login">登录</el-button>
+        <el-button type='primary' @click="login" v-bind:disabled='logging'>登录</el-button>
     </div>
     <div id='patient-page' class="main-container" v-bind:class="{hidden: !isPatient}">
         <patient-page></patient-page>
@@ -31,7 +31,8 @@ export default {
       data: 'welcome to parcel',
       role: '',
       username: '',
-      loginKind: 'patient'
+      loginKind: 'patient',
+      logging: false,
     }
   },
   computed: {
@@ -47,12 +48,39 @@ export default {
   },
   methods: {
       login() {
+
+          this.logging = true;
           console.log('prepare to login');
-          let loginKind = this.loginKind;
-          if(loginKind == 'patient' || loginKind == 'doctor'){
-              this.role = loginKind;
+          const loginKind = this.loginKind;
+          if(loginKind == 'patient'){
+            fetch('/paccounts?username=' + this.username, {method: 'GET'})
+            .then((ret) => {
+                if(ret.ok){
+                    this.role = loginKind;
+                } else {
+                    this.role = '';
+                }
+                this.logging = false;
+            }).catch((err) => {
+                this.role = '';
+                this.logging = false;
+            })
+          } else if (loginKind == 'doctor'){
+            fetch('/daccounts?username=' + this.username, {method: 'GET'})
+            .then((ret) => {
+                if(ret.ok){
+                    this.role = loginKind;
+                } else {
+                    this.role = '';
+                }
+                this.logging = false;
+            }).catch((err) => {
+                this.role = '';
+                this.logging = false;
+            })
           } else {
               this.role = '';
+              this.logging = false;
           }
       }
   }
