@@ -1,6 +1,6 @@
 
 <template>
-<div>
+<div class='root-container'>
     <div id='login-page' class='main-container' v-bind:class="{hidden: logged}">
         <div id='login-frame'>
             <el-tabs v-model="loginKind">
@@ -93,6 +93,7 @@ export default {
 body, html{
     height: 100%;
     bottom: 0;
+    margin: 0;
 }
 
 .hidden {
@@ -100,10 +101,7 @@ body, html{
 }
 
 #login-page {
-    position: absolute;
     background-color: white;
-    padding-left: 5em;
-    padding-right: 5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,13 +117,14 @@ body, html{
 }
 
 .main-container {
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
+.root-container {
+    width: 100%;
+    height: 100%;
+}
 
 
 </style>
