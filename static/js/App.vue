@@ -1,7 +1,7 @@
 
 <template>
 <div class='root-container'>
-    <div id='login-page' class='main-container' v-bind:class="{hidden: logged}">
+    <div id='login-page' class='main-container' v-if="!logged" >
         <div id='login-frame'>
             <el-tabs v-model="loginKind">
                 <el-tab-pane label='患者' name='patient'></el-tab-pane>
@@ -11,11 +11,11 @@
             <el-button type='primary' @click="login" v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
         </div>
     </div>
-    <div id='patient-page' class="main-container" v-bind:class="{hidden: !isPatient}">
+    <div id='patient-page' class="main-container" v-if='isPatient'>
         <patient-page></patient-page>
     </div>
 
-    <div id='doctor-page' class="main-container" v-bind:class="{hidden: !isDoctor}">
+    <div id='doctor-page' class="main-container" v-if='isDoctor'>
         <doctor-page></doctor-page>
     </div>
 
@@ -96,9 +96,6 @@ body, html{
     margin: 0;
 }
 
-.hidden {
-    display: none;
-}
 
 #login-page {
     background-color: white;
