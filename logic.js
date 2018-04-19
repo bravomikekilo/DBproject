@@ -4,8 +4,8 @@ const Router = require('koa-router');
 // require all RESTful api in RESTful folder
 const Doctors = require('./RESTful/doctors');
 const Accounts = require('./RESTful/accounts');
-const Reservation = require('./RESTful/reservations');
-
+const Reservations = require('./RESTful/reservations');
+const Records = require('./RESTful/records');
 
 /**
  * MainRouter 主路由及响应函数所需的全局上下文
@@ -25,9 +25,10 @@ class MainRouter {
         });
 
         // deploy RESTful api on main router
-        Accounts.setUp(this)
-        Doctors.setUp(this)
-        Reservation.setUp(this)
+        Accounts.setUp(this);
+        Doctors.setUp(this);
+        Reservations.setUp(this);
+        Records.setUp(this);
 
     }
 }
