@@ -9,15 +9,21 @@
                         {{doctor.name}}
                     </li>
                     -->
-                    <el-table :data="doctors[office]" height="80%">
+                    <el-table :data="doctors[office]" stripe="true" border="true">
                         <el-table-column
                             prop="id"
-                            label="医生代码"
-                        ></el-table-column>
+                            label="医生代码">
+                        </el-table-column>
                         <el-table-column
                             prop="name"
-                            label="医生姓名"
-                        >
+                            label="医生姓名">
+                        </el-table-column>
+                        <el-table-column
+                            fixed='right'
+                            label='操作'>
+                            <template slot-scope="scope">
+                                <el-button type="primary">挂号</el-button>
+                            </template>
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
