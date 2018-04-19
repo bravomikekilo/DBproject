@@ -1,15 +1,27 @@
 <template>
     <el-tabs v-model="aspect" tab-position="left">
+        <el-table :stripe="true" :border="true" :data="reservations">
+            <el-table-column
+                prop="id"
+                label="医生代码"
+            >
+            </el-table-column>
+            <el-table-column
+                prop='name'
+                label="医生姓名"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="section"
+                label="预约时间"
+            >
+            </el-table-column>
+        </el-table>
         <el-tab-pane label="挂号" name='reserve'>
             <el-tabs @tab-click='fetchOffice' type='border-card'>
                 <el-tab-pane v-for="office in offices" v-bind:key='office'
                     v-bind:label="office" v-bind:name="office">
-                    <!--
-                    <li v-for="doctor in doctors[office]" v-bind:key="doctor.id">
-                        {{doctor.name}}
-                    </li>
-                    -->
-                    <el-table :data="doctors[office]" stripe="true" border="true">
+                    <el-table :data="doctors[office]" :stripe="true" :border="true">
                         <el-table-column
                             prop="id"
                             label="医生代码">
@@ -41,7 +53,11 @@
 </template>
 
 <script>
+
+import {toQuery} from './util.js';
+
 export default {
+  props: ['pid'],
   data(){
     fetch('/offices', {method: 'GET'}).then((res) =>{
         res.json().then((ret) => {
@@ -53,7 +69,8 @@ export default {
         aspect: 'reserve',
         offices: [],
         step: 0,
-        doctors: {}
+        doctors: {},
+        reservations: []
     }
   },
   methods: {
@@ -65,6 +82,25 @@ export default {
                 this.$set(this.doctors, office, ret);
               })
           }).catch((err) => console.log(err));
+      },
+
+      fetchReservations(){
+          if(this.pid === undefined) return;
+          fetch('/reservations?pid=' + this.pid, {method: 'GET'}).then((res) => {
+              if(res.ok){
+                res.json().then((ret) => {
+                    this.reservations = ret;
+                })
+              } else {
+                console.log(res.status);
+                console.log(res.body);
+              }
+          }).catch((err) => console.log(err))
+      }
+  },
+  watch: {
+      pid: function(){
+          this.fetchReservations();
       }
   }
 }

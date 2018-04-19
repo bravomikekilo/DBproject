@@ -12,11 +12,11 @@
         </div>
     </div>
     <div id='patient-page' class="main-container" v-if='isPatient'>
-        <patient-page></patient-page>
+        <patient-page :pid="id"></patient-page>
     </div>
 
-    <div id='doctor-page' class="main-container" v-if='isDoctor'>
-        <doctor-page></doctor-page>
+    <div id='doctor-page' class="main-container" v-bind:did='id' v-if='isDoctor'>
+        <doctor-page :did="id"></doctor-page>
     </div>
 
 </div>
@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       data: 'welcome to parcel',
+      id: undefined,
       role: '',
       username: '',
       loginKind: 'patient',
@@ -50,7 +51,6 @@ export default {
   },
   methods: {
       login() {
-
           this.logging = true;
           console.log('prepare to login');
           const loginKind = this.loginKind;
@@ -59,6 +59,7 @@ export default {
             .then((ret) => {
                 if(ret.ok){
                     this.role = loginKind;
+                    ret.json().then((id) => this.id = id);
                 } else {
                     this.role = '';
                 }
@@ -72,6 +73,7 @@ export default {
             .then((ret) => {
                 if(ret.ok){
                     this.role = loginKind;
+                    ret.json().then((id) => this.id = id);
                 } else {
                     this.role = '';
                 }

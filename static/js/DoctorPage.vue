@@ -16,6 +16,7 @@
 
 <script>
 export default {
+  props: ['did'],
   data() {
       return {
           aspect: 'diag'

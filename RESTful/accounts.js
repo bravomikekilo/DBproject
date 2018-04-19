@@ -8,11 +8,11 @@ function setUp(context){
         try{
             const username = ctx.request.query['username'];
             const result = await context.pgPool.query(
-                'SELECT paccounts.username FROM paccounts WHERE paccounts.username = $1',
+                'SELECT paccounts.id FROM paccounts WHERE paccounts.username = $1',
                 [username]
             );
-            if(result.rowCount > 0){
-                //ctx.body = ???
+            if(result.rowCount === 1){
+                ctx.body = result.rows[0].id;
                 ctx.status = 200;
             } else {
                 ctx.body = "can't find username in database";
@@ -30,10 +30,11 @@ function setUp(context){
         try{
             const username = ctx.request.query['username'];
             const result = await context.pgPool.query(
-                'SELECT daccounts.username FROM daccounts WHERE daccounts.username = $1',
+                'SELECT daccounts.id FROM daccounts WHERE daccounts.username = $1',
                 [username]
             );
-            if(result.rowCount > 0){
+            if(result.rowCount === 1){
+                ctx.body = result[0].rows[0].id;
                 ctx.status = 200;
             } else {
                 ctx.body = "can't find username in database";
