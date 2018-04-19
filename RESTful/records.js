@@ -42,6 +42,6 @@ function setUp(context){
         }
     });
 
-
-
 }
+
+exports.setUp = setUp;
