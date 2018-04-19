@@ -32,16 +32,6 @@ const app = new Koa();
 const serve = new Serve(staticRoot);
 const bodyparser = new BodyParser();
 
-/*
-router.get('/', async (ctx, next) => {
-    ctx.redirect('/html/index.html')
-})
-
-router.get('/test/clientname', async (ctx, next) => {
-    ctx.status = 200;
-    ctx.body = JSON.stringify({client_name: 'bravomikekilo'});
-})
-*/
 const router = new Logic.MainRouter(dbConfig).router;
 app.use(serve);
 app.use(bodyparser);

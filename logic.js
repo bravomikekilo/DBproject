@@ -1,7 +1,10 @@
 const {Pool, Client} = require('pg');
 const Router = require('koa-router');
+
+// require all RESTful api in RESTful folder
 const Doctors = require('./RESTful/doctors');
-const Accounts = require('./RESTful/accounts')
+const Accounts = require('./RESTful/accounts');
+const Reservation = require('./RESTful/reservations');
 
 
 /**
@@ -21,25 +24,10 @@ class MainRouter {
             ctx.redirect('/index.html');
         });
 
-        this.router.get('/test/items', async (ctx, next) => {
-            try{
-                const result = await this.pgPool.query('SELECT items.content FROM items');
-                ctx.status = 200;
-                ctx.body = JSON.stringify(result.rows);
-            } catch (e) { ctx.status = 500; }
-        });
-
-        this.router.post('/test/items', async (ctx, next) => {
-            try {
-                ctx.status = 200;
-                const content = ctx.request.body;
-                await this.pgPool.query('INSERT INTO items (content) VALUES ($1)', [content]);
-            }
-            catch (e) { ctx.status = 500; }
-        });
-
+        // deploy RESTful api on main router
         Accounts.setUp(this)
         Doctors.setUp(this)
+        Reservation.setUp(this)
 
     }
 }
