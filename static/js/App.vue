@@ -118,6 +118,8 @@ body, html{
     height: 100%;
     padding-left: 5em;
     padding-right: 5em;
+    padding-top: 3em;
+    padding-bottom: 3em;
     box-sizing: border-box;
 }
 

@@ -1,22 +1,32 @@
 <template>
-    <el-tabs v-model="aspect">
+    <el-tabs v-model="aspect" tab-position="left">
         <el-tab-pane label="挂号" name='reserve'>
-            <el-steps :active="step" finish-status="success" class='pp-steps'>
-                <el-step title="选择医生"></el-step>
-                <el-step title="选择时间"></el-step>
-            </el-steps>
-
-            <el-tabs @tab-click='fetchOffice'>
+            <el-tabs @tab-click='fetchOffice' type='border-card'>
                 <el-tab-pane v-for="office in offices" v-bind:key='office'
                     v-bind:label="office" v-bind:name="office">
+                    <!--
+                    <li v-for="doctor in doctors[office]" v-bind:key="doctor.id">
+                        {{doctor.name}}
+                    </li>
+                    -->
+                    <el-table :data="doctors[office]" height="80%">
+                        <el-table-column
+                            prop="id"
+                            label="医生代码"
+                        ></el-table-column>
+                        <el-table-column
+                            prop="name"
+                            label="医生姓名"
+                        >
+                        </el-table-column>
+                    </el-table>
                 </el-tab-pane>
-
             </el-tabs>
 
 
         </el-tab-pane>
-        <el-tab-pane label="病例查询" name='recordSearch'>
-            病例查询
+        <el-tab-pane label="病历查询" name='recordSearch'>
+            病历查询
 
 
 
@@ -42,9 +52,12 @@ export default {
   },
   methods: {
       fetchOffice(tab, event) {
+          if(this.doctors[office] !== undefined) return;
           const office = tab.label;
           fetch('/offices/'+office, {method: 'GET'}).then((res) => {
-              res.json().then()
+              res.json().then((ret) => {
+                this.$set(this.doctors, office, ret);
+              })
           }).catch((err) => console.log(err));
       }
   }
