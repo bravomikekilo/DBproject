@@ -116,6 +116,9 @@ body, html{
 .main-container {
     width: 100%;
     height: 100%;
+    padding-left: 5em;
+    padding-right: 5em;
+    box-sizing: border-box;
 }
 
 .root-container {
