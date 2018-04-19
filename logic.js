@@ -1,7 +1,7 @@
 const {Pool, Client} = require('pg');
 const Router = require('koa-router');
-const Doctors = require('./doctors');
-const Accounts = require('./accounts')
+const Doctors = require('./RESTful/doctors');
+const Accounts = require('./RESTful/accounts')
 
 
 /**
