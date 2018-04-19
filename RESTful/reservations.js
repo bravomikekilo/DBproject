@@ -11,11 +11,11 @@ function setUp(context){
             const query = ctx.request.query;
             if(query.pid !== undefined){
                 const result = await context.pgPool.query(
-                    `SELECT doctors.id, doctors.name
+                    `SELECT doctors.id, doctors.name, today_reservations.section
                      FROM today_reservations INNER JOIN doctors
                      ON doctors.id = today_reservations.did
                      WHERE today_reservations.pid = $1;`,
-                    [ctx.params.pid]
+                    [parseInt(query.pid)]
                 );
                 ctx.body = JSON.stringify(result.rows);
             } else if(query.did !== undefined) {
@@ -23,7 +23,7 @@ function setUp(context){
                     `SELECT patients.id, patients.name
                      FROM today_reservations INNER JOIN patients USING(patients.id)
                      WHERE did = $1;`,
-                    [ctx.params.did]
+                    [parseInt(query.did)]
                 );
                 ctx.body = JSON.stringify(result.rows);
             } else {
