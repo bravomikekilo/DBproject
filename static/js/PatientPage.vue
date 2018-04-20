@@ -19,6 +19,14 @@
                     label="预约时间"
                 >
                 </el-table-column>
+
+                <el-table-column
+                    fixed="right"
+                    label='操作'>
+                    <template slot-scope="scope">
+                        <el-button type='danger' @click="cancel(scope.row.rid)">取消</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <p>新建预约</p>
             <el-tabs @tab-click='fetchOffice' type='border-card'>
@@ -97,6 +105,17 @@ export default {
                 console.log(res.body);
               }
           }).catch((err) => console.log(err))
+      },
+
+      cancel(did){
+          fetch('/reservations/' + did, {method: 'DELETE'}).then((res) => {
+              if(res.ok){
+                  this.fetchReservations();
+              } else {
+                  console.log(res.status);
+                  console.log(res.body);
+              }
+          }).catch((err) => console.log(err));
       }
   },
   watch: {

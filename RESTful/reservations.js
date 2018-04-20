@@ -11,7 +11,7 @@ function setUp(context){
             const query = ctx.request.query;
             if(query.pid !== undefined){
                 const result = await context.pgPool.query(
-                    `SELECT doctors.id, doctors.name, today_reservations.section
+                    `SELECT doctors.id, doctors.name, today_reservations.section, today_reservations.id as rid
                      FROM today_reservations INNER JOIN doctors
                      ON doctors.id = today_reservations.did
                      WHERE today_reservations.pid = $1;`,
@@ -20,7 +20,7 @@ function setUp(context){
                 ctx.body = JSON.stringify(result.rows);
             } else if(query.did !== undefined) {
                 const result = await context.pgPool.query(
-                    `SELECT patients.id, patients.name
+                    `SELECT patients.id, patients.name, today_reservations.section, today_reservations.id as rid
                      FROM today_reservations INNER JOIN patients USING(patients.id)
                      WHERE did = $1;`,
                     [parseInt(query.did)]
@@ -34,7 +34,7 @@ function setUp(context){
             console.log(e);
             ctx.status = 500;
         }
-    })
+    });
 
     // apply for a new reservation in today, request must provide a patient id, a doctor id and a section
     context.router.post('/reservations', async(ctx, next) => {
@@ -58,7 +58,7 @@ function setUp(context){
         } finally {
             client.release();
         }
-    })
+    });
 
     // cancel a reservation in today, request must provide a patient id, a doctor id and a section
     context.router.delete('/reservations', async(ctx, next) => {
@@ -81,7 +81,24 @@ function setUp(context){
         }
     });
 
-}
+    context.router.delete('/reservations/:id', async(ctx, next) => {
+        try{
+            ctx.status = 200;
+            const result = await context.pgPool.query(
+                `DELETE FROM reservations
+                 WHERE
+                 reservations.id = $1
+                `,
+                [parseInt(ctx.params.id)]
+            );
+            console.log(result);
+        } catch (e) {
+            console.log(e)
+            ctx.status = 500;
+        }
+    });
+
+};
 
 
 exports.setUp = setUp
