@@ -13,10 +13,26 @@ function setUp(context){
             ctx.status = 200;
             ctx.body = JSON.stringify(result.rows);
         } catch (e) {
-            console.log(e)
+            console.log(e);
             ctx.status = 500;
         }
     });
+
+    context.router.get('/doctors/:id/occupy', async(ctx, next) => {
+        try{
+            ctx.status = 200;
+            const result = await context.pgPool.query(
+                `SELECT today_reservations.section
+                 FROM today_reservations
+                 WHERE today_reservations.did = $1;`,
+                [ctx.params.id]
+            )
+            ctx.body = JSON.stringify(result.rows);
+        } catch (e) {
+            console.log(e);
+            ctx.status = 500;
+        }
+    })
 
     // GET /office return all office
     context.router.get('/offices', async (ctx, next) => {
