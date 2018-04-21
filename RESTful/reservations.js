@@ -21,8 +21,9 @@ function setUp(context){
             } else if(query.did !== undefined) {
                 const result = await context.pgPool.query(
                     `SELECT patients.id, patients.name, today_reservations.section, today_reservations.id as rid
-                     FROM today_reservations INNER JOIN patients USING(patients.id)
-                     WHERE did = $1;`,
+                     FROM today_reservations INNER JOIN patients
+                     ON patients.id = today_reservations.pid
+                     WHERE today_reservations.did = $1;`,
                     [parseInt(query.did)]
                 );
                 ctx.body = JSON.stringify(result.rows);

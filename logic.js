@@ -6,6 +6,7 @@ const Doctors = require('./RESTful/doctors');
 const Accounts = require('./RESTful/accounts');
 const Reservations = require('./RESTful/reservations');
 const Records = require('./RESTful/records');
+const Patients = require('./RESTful/patients')
 
 /**
  * MainRouter 主路由及响应函数所需的全局上下文
@@ -29,7 +30,7 @@ class MainRouter {
         Doctors.setUp(this);
         Reservations.setUp(this);
         Records.setUp(this);
-
+        Patients.setUp(this);
     }
 }
 

@@ -34,7 +34,7 @@ function setUp(context){
                 [username]
             );
             if(result.rowCount === 1){
-                ctx.body = result[0].rows[0].id;
+                ctx.body = result.rows[0].id;
                 ctx.status = 200;
             } else {
                 ctx.body = "can't find username in database";
