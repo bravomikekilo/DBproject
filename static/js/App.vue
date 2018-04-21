@@ -7,7 +7,7 @@
                 <el-tab-pane label='患者' name='patient'></el-tab-pane>
                 <el-tab-pane label='医生' name='doctor'></el-tab-pane>
             </el-tabs>
-            <el-input v-model="username" placeholder='用户名'></el-input>
+            <el-input v-model="username" placeholder='用户名' v-on:keydown.enter.native='login'></el-input>
             <el-button type='primary' @click="login" v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
         </div>
     </div>
