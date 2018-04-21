@@ -45,7 +45,16 @@
                             fixed='right'
                             label='操作'>
                             <template slot-scope="scope">
-                                <el-button type="primary">挂号</el-button>
+                                <el-select v-model="selections[scope.row.id]" placeholder="请选择时间" v-on:visible-change="onOccupy(scope.row.id, $event)">
+                                    <el-option label="加载中" :value="null" :disabled="true"
+                                     v-if="occupy[scope.row.id].length == 0">
+                                    </el-option>
+                                    <el-option v-if='occupy[scope.row.id].length != 0'
+                                     v-for="occu in occupy[scope.row.id]" :key="occu.section"
+                                     :label="occu" :value="occu"
+                                    ></el-option>
+                                </el-select>
+                                <el-button type="primary" @click="register(scope.row.id)">挂号</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -63,7 +72,7 @@
 
 <script>
 
-import {toQuery} from './util.js';
+import {toQuery, occupy2free} from './util.js';
 
 export default {
   props: ['pid'],
@@ -79,6 +88,8 @@ export default {
         offices: [],
         step: 0,
         doctors: {},
+        occupy: {},
+        selections: {},
         reservations: []
     }
   },
@@ -89,6 +100,10 @@ export default {
           fetch('/offices/'+office, {method: 'GET'}).then((res) => {
               res.json().then((ret) => {
                 this.$set(this.doctors, office, ret);
+                ret.forEach(d => {
+                    this.$set(this.occupy, d.id, []);
+                    this.$set(this.selections, d.id, undefined);
+                });
               })
           }).catch((err) => console.log(err));
       },
@@ -105,6 +120,48 @@ export default {
                 console.log(res.body);
               }
           }).catch((err) => console.log(err))
+      },
+
+      fetchOccupy(did){
+          fetch('/doctors/' + did + '/occupy', {method: 'GET'}).then((res) => {
+              if(res.ok){
+                  res.json().then((ret) => {
+                      this.$set(this.occupy, did, occupy2free(ret.map(v => v.section)));
+                  })
+              } else {
+                  console.log(res.status);
+                  console.log(res.body);
+              }
+          }).catch((err) => console.log(err));
+      },
+
+      register(id){
+          fetch('/reservations', {
+              method: 'POST',
+              body: JSON.stringify({pid: this.pid, did: id, section: this.selections[id]}),
+              headers: new Headers({
+                  'Content-Type': 'application/json'
+              })
+          }).then(res => {
+              if(res.ok) {
+                  this.fetchReservations();
+              } else {
+                  console.log('注册失败');
+                  console.log(res.status);
+                  console.log(res.body);
+              }
+          }).catch(err => {
+              console.log(err);
+          })
+      },
+
+      onOccupy(id, event){
+          console.log('call onOccupy');
+          console.log(id);
+          console.log(event);
+          if(event){
+              this.fetchOccupy(id);
+          }
       },
 
       cancel(did){
