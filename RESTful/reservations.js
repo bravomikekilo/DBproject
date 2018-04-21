@@ -44,7 +44,7 @@ function setUp(context){
             ctx.status = 200;
             const content = ctx.request.body;
             const result = await client.query(
-                `INSERT INTO reservations (commitdate, did, pid, section)
+                `INSERT INTO reservations (commitdate, pid, did, section)
                  VALUES (current_date, $1, $2, $3);`,
                 [content.pid, content.did, content.section]
             );
