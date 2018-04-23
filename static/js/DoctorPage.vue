@@ -27,7 +27,7 @@
   <el-tab-pane label='诊断记录' name='diag' v-if="currentReservation != undefined">
     <el-row>
       <el-col :span="18"><p>患者情况</p></el-col>
-      <el-col :span="6"><el-button type="primary">完成诊断</el-button> </el-col>
+      <el-col :span="6"><el-button type="primary" @click="finishDiagnose">完成诊断</el-button> </el-col>
     </el-row>
     <el-card class="box-card" v-loading='currentPatient === undefined'>
       <div>
@@ -103,6 +103,29 @@ export default {
         res.json().then(ret => {
           this.currentPatient = ret[0];
         })
+      }).catch(err => console.log(err));
+    },
+
+    finishDiagnose(){
+      fetch('/records', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+          id: this.currentReservation.rid,
+          medicine: this.medicine,
+          description: this.description,
+        })
+      }).then(res => {
+        if(res.ok){
+          this.currentReservation = undefined;
+          this.currentPatient = undefined;
+          this.fetchReservations();
+        } else {
+          console.log(res.status);
+          console.log(res.body);
+        }
       }).catch(err => console.log(err));
     }
   },

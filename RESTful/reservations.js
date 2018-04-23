@@ -14,7 +14,8 @@ function setUp(context){
                     `SELECT doctors.id, doctors.name, today_reservations.section, today_reservations.id as rid
                      FROM today_reservations INNER JOIN doctors
                      ON doctors.id = today_reservations.did
-                     WHERE today_reservations.pid = $1;`,
+                     LEFT JOIN records ON today_reservations.id = records.id
+                     WHERE records.id is NULL and today_reservations.pid = $1;`,
                     [parseInt(query.pid)]
                 );
                 ctx.body = JSON.stringify(result.rows);
@@ -23,7 +24,8 @@ function setUp(context){
                     `SELECT patients.id, patients.name, today_reservations.section, today_reservations.id as rid
                      FROM today_reservations INNER JOIN patients
                      ON patients.id = today_reservations.pid
-                     WHERE today_reservations.did = $1;`,
+                     LEFT JOIN records ON today_reservations.id = records.id
+                     WHERE records.id is NULL and today_reservations.did = $1;`,
                     [parseInt(query.did)]
                 );
                 ctx.body = JSON.stringify(result.rows);

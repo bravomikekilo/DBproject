@@ -62,8 +62,10 @@
             </el-tabs>
         </el-tab-pane>
         <el-tab-pane label="病历查询" name='recordSearch'>
-            病历查询
-
+            <record-view
+                :pid="pid"
+            >
+            </record-view>
 
 
         </el-tab-pane>
@@ -72,9 +74,11 @@
 
 <script>
 
+import RecordView from './RecordView.vue';
 import {toQuery, occupy2free} from './util.js';
 
 export default {
+  components: {RecordView},
   props: ['pid'],
   data(){
     fetch('/offices', {method: 'GET'}).then((res) =>{
