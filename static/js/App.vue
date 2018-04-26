@@ -7,10 +7,10 @@
                 <el-tab-pane label='患者' name='patient'></el-tab-pane>
                 <el-tab-pane label='医生' name='doctor'></el-tab-pane>
             </el-tabs>
-            <!--<el-input v-model="username" placeholder='用户名' v-on:keydown.enter.native='login'></el-input>-->
-        <!--//add password row -->
-            <el-input v-model="username" placeholder='用户名' ></el-input> 
-            <el-input v-model="password" placeholder='密码' v-on:keydown.enter.native='login'></el-input>
+            <el-input v-model="username" placeholder='用户名' ></el-input>
+            <el-input v-model="password" placeholder='密码'
+                style='margin-top:5px'
+                v-on:keydown.enter.native='login'></el-input>
             <el-button type='primary' @click="login" v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
         </div>
     </div>
@@ -58,9 +58,7 @@ export default {
           console.log('prepare to login');
           const loginKind = this.loginKind;
           if(loginKind == 'patient'){
-           fetch('/paccounts?username=' + this.username, {method: 'GET'},'/paccounts?password='+this.password,{method: 'GET'})
-        //fetch('/paccounts?username=' + this.username, '/paccounts?password='+this.password,{method: 'GET'})
-            //every request is with a method
+            fetch('/paccounts?username=' + this.username, {method: 'GET'})
             .then((ret) => {
                 if(ret.ok){
                     this.role = loginKind;
@@ -74,7 +72,7 @@ export default {
                 this.logging = false;
             })
           } else if (loginKind == 'doctor'){
-            fetch('/daccounts?username=' + this.username, {method: 'GET'}, '/daccounts?password='+this.password, {method: 'GET'})
+            fetch('/daccounts?username=' + this.username, {method: 'GET'})
             .then((ret) => {
                 if(ret.ok){
                     this.role = loginKind;
