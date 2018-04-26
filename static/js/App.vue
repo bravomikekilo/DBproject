@@ -10,7 +10,8 @@
             <!--<el-input v-model="username" placeholder='用户名' v-on:keydown.enter.native='login'></el-input>-->
         <!--//add password row -->
             <el-input v-model="username" placeholder='用户名' ></el-input>
-            <el-input v-model="password" placeholder='密码' ></el-input>
+               
+            <el-input v-model="password" placeholder='密码' v-on:keydown.enter.native='login'></el-input>
             <el-button type='primary' @click="login" v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
         </div>
     </div>
@@ -59,7 +60,8 @@ export default {
           const loginKind = this.loginKind;
           if(loginKind == 'patient'){
            fetch('/paccounts?username=' + this.username, {method: 'GET'},'/paccounts?password='+this.password,{method: 'GET'})
-           //fetch('/paccounts?username=' + this.username, '/paccounts?password='+this.password,{method: 'GET'})
+        //fetch('/paccounts?username=' + this.username, '/paccounts?password='+this.password,{method: 'GET'})
+            //every request is with a method
             .then((ret) => {
                 if(ret.ok){
                     this.role = loginKind;
