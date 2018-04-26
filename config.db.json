@@ -1,6 +1,6 @@
 {
-    "user": "postgres",
+    "user": "adamli",
     "host": "localhost",
     "database": "hospital",
-    "password": "freedom"
+    "password": ""
 }
