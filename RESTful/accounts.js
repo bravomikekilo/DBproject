@@ -24,6 +24,41 @@ function setUp(context){
         }
     })
 
+    context.router.post('/paccounts', async (ctx, next) => {
+        try{
+            const content = ctx.request.body;
+            const client = await context.pgPool.connect();
+            try{
+                await client.query('BEGIN');
+                const ids = await client.query(
+                    `INSERT INTO patients (name, gender, birthday)
+                     VALUES ($1, $2, $3)
+                     RETURNING id;
+                    `,
+                    [content.name, content.gender, content.birthday]
+                );
+                console.log(ids);
+                const id = ids.rows[0]['id'];
+                const row = await client.query(
+                    `INSERT INTO paccounts
+                     VALUES ($1, $2, $3);
+                    `,
+                    [id, content.username, content.password]
+                );
+                await client.query('COMMIT');
+                ctx.status = 200;
+            } catch (e) {
+                await client.query('ROLLBACK');
+                throw e;
+            } finally {
+                client.release();
+            }
+        } catch (e) {
+            console.log(e);
+            ctx.status = 500;
+        }
+    })
+
 
 
     context.router.get('/daccounts', async (ctx, next) => {

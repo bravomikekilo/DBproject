@@ -3,15 +3,30 @@
 <div class='root-container'>
     <div id='login-page' class='main-container' v-if="!logged" >
         <div id='login-frame'>
-            <el-tabs v-model="loginKind">
-                <el-tab-pane label='患者' name='patient'></el-tab-pane>
-                <el-tab-pane label='医生' name='doctor'></el-tab-pane>
+            <el-tabs tab-position="left">
+                <el-tab-pane label='登录' name='login'>
+                    <el-tabs v-model="loginKind">
+                        <el-tab-pane label='患者' name='patient'></el-tab-pane>
+                        <el-tab-pane label='医生' name='doctor'></el-tab-pane>
+                    </el-tabs>
+                    <el-input v-model="username" placeholder='用户名' ></el-input>
+                    <el-input v-model="password" placeholder='密码'
+                        style='margin-top:5px'
+                        v-on:keydown.enter.native='login'></el-input>
+                    <el-button type='primary' @click="login"
+                        v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
+                </el-tab-pane>
+                <el-tab-pane label='注册' name='register'>
+                    <el-input v-model="name" placeholder="姓名" style="margin-top:10px"></el-input>
+                    <el-radio v-model="sex" :label='true'>男</el-radio>
+                    <el-radio v-model="sex" :label='false'>女</el-radio>
+                    <el-input v-model="birthday" placeholder="生日" style='margin-top:10px'></el-input>
+                    格式 '1996-12-21'
+                    <el-input v-model="username" placeholder="用户名" style='margin-top:10px'></el-input>
+                    <el-input v-model="password" placeholder="密码" style='margin-top:10px'></el-input>
+                    <el-button type='primary' @click='register' style="margin-top:10px">注册</el-button>
+                </el-tab-pane>
             </el-tabs>
-            <el-input v-model="username" placeholder='用户名' ></el-input>
-            <el-input v-model="password" placeholder='密码'
-                style='margin-top:5px'
-                v-on:keydown.enter.native='login'></el-input>
-            <el-button type='primary' @click="login" v-bind:disabled='logging' style="margin-top:10px">登录</el-button>
         </div>
     </div>
     <div id='patient-page' class="main-container" v-if='isPatient'>
@@ -37,8 +52,12 @@ export default {
       id: undefined,
       role: '',
       username: '',
+      password: '',
       loginKind: 'patient',
       logging: false,
+      name: '',
+      sex: true,
+      birthday: '',
     }
   },
   computed: {
@@ -89,6 +108,44 @@ export default {
               this.role = '';
               this.logging = false;
           }
+      },
+
+      register() {
+          let name = this.name;
+          let sex = this.sex;
+          let username = this.username;
+          let password = this.password;
+          let birthday = new Date(this.birthday);
+
+          fetch('/paccounts', {method: 'POST',
+            body: JSON.stringify({
+                'name': name,
+                'gender': sex,
+                'username': username,
+                'password': password,
+                'birthday': birthday
+                }),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+          }).then(ret => {
+              if(ret.ok){
+                  console.log('post success');
+                  ret.json().then(v => console.log(v));
+              } else {
+                  this.$notify({
+                      title: '注册失败',
+                      message: '注册失败,请重试'
+                  });
+                  console.log('server error');
+              }
+          }).catch(err => {
+              this.$notify({
+                  title: '注册失败',
+                  message: '网络错误,请检查您的网络设置'
+              })
+              console.log(err);
+          })
       }
   }
 }

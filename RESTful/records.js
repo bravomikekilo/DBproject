@@ -14,6 +14,18 @@ function setUp(context){
                     [query.id]
                 );
                 ctx.body = JSON.stringify(result.rows);
+            } else if(query.from !== undefined || query.to !== undefined){
+                const fromDate = query.from === undefined ? new Date('1970-1-1') : new Date(query.from);
+                const toDate = query.to === undefined ? new Date() : new Date(query.to);
+                const result = await context.pgPool.query(
+                    `SELECT records.medicine, records.description, reservations.commitdate
+                    FROM records INNER JOIN reservations
+                    ON records.id = reservations.id
+                    WHERE reservations.commitdate
+                    BETWEEN $1 and $2; `,
+                    [fromDate, toDate]
+                );
+                ctx.body = JSON.stringify(result.rows);
             } else {
                 ctx.status = 500;
                 ctx.body = 'you must specify code'
@@ -27,15 +39,30 @@ function setUp(context){
     context.router.get('/records/:pid', async(ctx, next) => {
         try{
             ctx.status = 200;
-            const result = await context.pgPool.query(
-                `SELECT records.id, records.medicine, records.description, reservations.commitdate as date
-                 FROM records INNER JOIN reservations
-                 ON records.id = reservations.id
-                 WHERE reservations.pid = $1;`,
-                [ctx.params.pid]
-            );
-            console.log(result);
-            ctx.body = JSON.stringify(result.rows);
+            const query = ctx.request.query;
+            if(query.from !== undefined || query.to !== undefined){
+                const fromDate = query.from === undefined ? new Date('1970-1-1') : new Date(query.from);
+                const toDate = query.to === undefined ? new Date() : new Date(query.to);
+                const result = await context.pgPool.query(
+                    `SELECT records.medicine, records.description, reservations.commitdate
+                     FROM records INNER JOIN reservations
+                     ON records.id = reservations.id
+                     WHERE reservations.commitdate
+                     BETWEEN $1 and $2
+                     AND reservations.pid = $3;`,
+                     [fromDate, toDate, ctx.params.pid]
+                );
+                ctx.body = JSON.stringify(result.rows);
+            } else {
+                const result = await context.pgPool.query(
+                    `SELECT records.id, records.medicine, records.description, reservations.commitdate as date
+                    FROM records INNER JOIN reservations
+                    ON records.id = reservations.id
+                    WHERE reservations.pid = $1;`,
+                    [ctx.params.pid]
+                );
+                ctx.body = JSON.stringify(result.rows);
+            }
         } catch(e) {
             console.log(e);
             ctx.status = 500;

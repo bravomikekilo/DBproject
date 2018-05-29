@@ -48,10 +48,19 @@ export default {
     },
     methods: {
         search() {
-            fetch('/records/' + this.pid, {
+            let fromDate = '';
+            let toDate = '';
+            if(this.startDate != undefined){
+                fromDate = '?from=' + this.startDate;
+            }
+            if(this.toDate != undefined){
+                toDate = '?to=' + this.endDate;
+            }
+            fetch('/records/' + this.pid + fromDate + toDate, {
                 method: "GET"
             }).then(res => {
                 res.json().then(ret => {
+                    console.log(ret);
                     this.data = ret;
                 })
             }).catch(err => console.log(err));
