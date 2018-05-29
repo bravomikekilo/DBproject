@@ -1,8 +1,7 @@
 
 export function toQuery(obj){
-    return Array.map(Object.entries(obj), (pair) => {
-        pair.join('=');
-    }).join('$');
+    const terms = Array.map(Object.entries(obj), pair => pair.join('='));
+    return `?${terms.join('&')}`;
 }
 
 export function occupy2free(occu){

@@ -43,6 +43,7 @@
 <script>
 import PatientPage from './PatientPage.vue'
 import DoctorPage from './DoctorPage.vue'
+import { toQuery } from './util'
 
 export default {
   components: {PatientPage, DoctorPage},
@@ -77,12 +78,28 @@ export default {
           console.log('prepare to login');
           const loginKind = this.loginKind;
           if(loginKind == 'patient'){
-            fetch('/paccounts?username=' + this.username, {method: 'GET'})
+            const params = toQuery({
+                username: this.username,
+                password: this.password
+            });
+            console.log(params);
+            fetch('/paccounts' + params, {method: 'GET'})
             .then((ret) => {
                 if(ret.ok){
                     this.role = loginKind;
                     ret.json().then((id) => this.id = id);
                 } else {
+                    if(ret.status === 401) {
+                        this.$notify({
+                            title: '登录失败',
+                            message: '用户名或密码错误'
+                        })
+                    } else {
+                        this.$notify({
+                            title: '登录失败',
+                            message: '网络错误, 请检查您的网络设置'
+                        })
+                    }
                     this.role = '';
                 }
                 this.logging = false;

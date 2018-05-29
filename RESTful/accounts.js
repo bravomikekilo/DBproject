@@ -7,15 +7,19 @@ function setUp(context){
     context.router.get('/paccounts', async (ctx, next) => {
         try{
             const username = ctx.request.query['username'];
+            const password = ctx.request.query['password'];
             const result = await context.pgPool.query(
-                'SELECT paccounts.id FROM paccounts WHERE paccounts.username = $1',
+                `SELECT paccounts.id, paccounts.password
+                 FROM paccounts
+                 WHERE paccounts.username = $1`,
                 [username]
             );
-            if(result.rowCount === 1){
+            const correctPassword = result.rows[0]['password'];
+            if(result.rowCount === 1 && correctPassword === password){
                 ctx.body = result.rows[0].id;
                 ctx.status = 200;
             } else {
-                ctx.body = "can't find username in database";
+                ctx.body = "incorrect username and password";
                 ctx.status = 401;
             }
         } catch (e) {
