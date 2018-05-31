@@ -18,7 +18,7 @@ function setUp(context){
                 const fromDate = query.from === undefined ? new Date('1970-1-1') : new Date(query.from);
                 const toDate = query.to === undefined ? new Date() : new Date(query.to);
                 const result = await context.pgPool.query(
-                    `SELECT records.medicine, records.description, reservations.commitdate
+                    `SELECT records.medicine, records.description, reservations.commitdate as date
                     FROM records INNER JOIN reservations
                     ON records.id = reservations.id
                     WHERE reservations.commitdate
@@ -44,7 +44,7 @@ function setUp(context){
                 const fromDate = query.from === undefined ? new Date('1970-1-1') : new Date(query.from);
                 const toDate = query.to === undefined ? new Date() : new Date(query.to);
                 const result = await context.pgPool.query(
-                    `SELECT records.medicine, records.description, reservations.commitdate
+                    `SELECT records.medicine, records.description, reservations.commitdate as date
                      FROM records INNER JOIN reservations
                      ON records.id = reservations.id
                      WHERE reservations.commitdate

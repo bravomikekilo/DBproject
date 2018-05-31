@@ -59,15 +59,19 @@
 
   </el-tab-pane>
 
-  <el-tab-pane label='病历查询' name='recordSearch'>
-    病历查询
+  <el-tab-pane label='病历查询' name='recordSearch' v-if="currentReservation !== undefined">
+    <record-view :pid="currentReservation.id">
+    </record-view>
   </el-tab-pane>
 
 </el-tabs>
 </template>
 
 <script>
+import RecordView from './RecordView.vue';
+
 export default {
+  components: {RecordView},
   props: ['did'],
   data() {
     return {

@@ -51,7 +51,7 @@
                                     </el-option>
                                     <el-option v-if='occupy[scope.row.id].length != 0'
                                      v-for="occu in occupy[scope.row.id]" :key="occu.section"
-                                     :label="occu" :value="occu"
+                                     :label="occu + 8 + ':00'" :value="occu"
                                     ></el-option>
                                 </el-select>
                                 <el-button type="primary" @click="register(scope.row.id)">挂号</el-button>
